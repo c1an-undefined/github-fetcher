@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Github Profile Fetcher</title>
     <script src="index.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
+    <div class="form">
         <label for="username">Github Username:</label>
         <input type="text" name="username" id="username-input">
         <button id="fetch-profile-btn">Fetch Profile</button>
     </div>
-    <div>
+    <div class="display-card">
         <h2 id="name-display"></h2>
         <h4 id="username-display"></h4>
         <img id="profimg-display" src="">
@@ -22,12 +23,10 @@
         <span id="followers-display"></span>
         <span id="following-display"></span>
         <span id="public-repos-display"></span>
-        <div>
-            <span id="email-display"></span>
-            <span id="location-display"></span>
-            <span id="company-display"></span>
-            <span id="blog-display"><a href=""></a></span>
-        </div>
+        <span id="email-display"></span>
+        <span id="location-display"></span>
+        <span id="company-display"></span>
+        <span id="blog-display"><a href=""></a></span>
     </div>
 </body>
 </html>

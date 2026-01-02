@@ -1,0 +1,64 @@
+* {
+    font-family: monospace;
+}
+
+body {
+    background-color: #010409;
+    color: #f0f6fc;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.display-card {
+    width: 60vw;
+    padding: 1em 2em;
+    border: white 1px solid;
+    border-radius: 10px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-areas: 
+    "name name"
+    "img img"
+    "bio bio"
+    "created updated"
+    "followers following"
+    "repos repos"
+    "email location"
+    "company blog";
+    grid-template-rows: 1fr 2fr 1fr repeat(5, 0.5fr);
+    grid-template-columns: 1fr 1fr;
+}
+
+#profimg-display {
+    height: 20vh;
+    grid-area: img;
+}
+
+#name-display {
+    grid-area: name;
+}
+
+#username-display {
+    grid-area: name;
+    margin-left: 20%;
+}
+
+#bio-display {
+    grid-area: bio;
+}
+
+#public-repos-display {
+    grid-area: repos;
+}
