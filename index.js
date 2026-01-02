@@ -1,20 +1,6 @@
 const fetchBtn = document.getElementById("fetch-profile-btn")
 const usernameInput = document.getElementById("username-input")
 
-const nameDisplay = document.getElementById("name-display")
-const usernameDisplay = document.getElementById("username-display")
-const profImgDisplay = document.getElementById("profimg-display")
-const bioDisplay = document.getElementById("bio-display")
-const dateCreatedDisplay = document.getElementById("created-display")
-const dateUpdatedDisplay = document.getElementById("last-updated-display")
-const followersDisplay = document.getElementById("followers-display")
-const followingDisplay = document.getElementById("following-display")
-const reposDisplay = document.getElementById("public-repos-display")
-const emailDisplay = document.getElementById("email-display")
-const locationDisplay = document.getElementById("location-display")
-const companyDisplay = document.getElementById("company-display")
-const blogDisplay = document.getElementById("blog-display")
-
 async function fetchUser(username) {
     const url = `https://api.github.com/users/${username}`
     try {
@@ -27,20 +13,54 @@ async function fetchUser(username) {
     }
 }
 
-fetchBtn.addEventListener("click", async ()=> {
-    const userData = await fetchUser(usernameInput.value)
+function setDisplay(id, text) {
+    const el = document.getElementById(id)
+    if (!el) return
+    el.textContent = text || ""
+}
 
-    nameDisplay.textContent = userData.name
-    usernameDisplay.textContent = userData.login
-    profImgDisplay.src = userData.avatar_url
-    bioDisplay.textContent = userData.bio 
-    dateCreatedDisplay.textContent = `Date Created: ${new Date(userData.created_at).toDateString()}`
-    dateUpdatedDisplay.textContent = `Last Updated: ${new Date(userData.updated_at).toDateString()}`
-    followersDisplay.textContent = `Followers: ${userData.followers}`
-    followingDisplay.textContent = `Following: ${userData.following}`
-    reposDisplay.textContent = `Public Repositories: ${userData.public_repos}`
-    emailDisplay.innerHTML = userData.email ? `Email: <a href="${userData.email}">` : ""
-    locationDisplay.textContent = userData.location
-    companyDisplay.textContent = userData.company
-    blogDisplay.textContent = userData.blog ? `Blog: ${userData.blog}` : ""
+fetchBtn.addEventListener("click", async () => {
+    const userData = await fetchUser(usernameInput.value.trim())
+    if (!userData || userData.message === "Not Found") {
+        alert("User not found")
+        return
+    }
+
+    const elMaps = [
+        { id: 'name-display', prop: 'name' },
+        { id: 'username-display', prop: 'login' },
+        { id: 'bio-display', prop: 'bio' },
+        { id: 'location-display', prop: 'location' },
+        { id: 'company-display', prop: 'company' }
+    ]
+
+    elMaps.forEach(({ id, prop }) => setDisplay(id, userData[prop]))
+
+    const profImg = document.getElementById('profimg-display')
+    if (profImg) profImg.src = userData.avatar_url || ''
+
+    setDisplay('created-display', userData.created_at ? `Date Created: ${new Date(userData.created_at).toDateString()}` : '')
+    setDisplay('last-updated-display', userData.updated_at ? `Last Updated: ${new Date(userData.updated_at).toDateString()}` : '')
+    setDisplay('followers-display', userData.followers != null ? `Followers: ${userData.followers}` : '')
+    setDisplay('following-display', userData.following != null ? `Following: ${userData.following}` : '')
+    setDisplay('public-repos-display', userData.public_repos != null ? `Public Repositories: ${userData.public_repos}` : '')
+
+    const emailEl = document.getElementById('email-display')
+    if (emailEl) {
+        if (userData.email) {
+            emailEl.innerHTML = `Email: <a href="mailto:${userData.email}">${userData.email}</a>`
+        } else {
+            emailEl.textContent = ''
+        }
+    }
+
+    const blogEl = document.getElementById('blog-display')
+    if (blogEl) {
+        if (userData.blog) {
+            const url = userData.blog.startsWith('http') ? userData.blog : `https://${userData.blog}`
+            blogEl.innerHTML = `Blog: <a href="${url}" target="_blank" rel="noopener noreferrer">${userData.blog}</a>`
+        } else {
+            blogEl.textContent = ''
+        }
+    }
 })
