@@ -1,5 +1,23 @@
 const fetchBtn = document.getElementById("fetch-profile-btn")
 const usernameInput = document.getElementById("username-input")
+const card = document.querySelector('.display-card')
+
+function clearCard() {
+    const ids = [
+        'name-display','username-display','bio-display','location-display','company-display',
+        'created-display','last-updated-display','followers-display','following-display','public-repos-display',
+        'email-display','blog-display'
+    ]
+    ids.forEach(id => {
+        const el = document.getElementById(id)
+        if (!el) return
+        if (id === 'blog-display' || id === 'email-display') el.innerHTML = ''
+        else el.textContent = ''
+    })
+    const profImg = document.getElementById('profimg-display')
+    if (profImg) profImg.src = ''
+    if (card) card.classList.remove('loaded')
+}
 
 async function fetchUser(username) {
     const url = `https://api.github.com/users/${username}`
@@ -16,13 +34,18 @@ async function fetchUser(username) {
 function setDisplay(id, text) {
     const el = document.getElementById(id)
     if (!el) return
-    el.textContent = text || ""
+    if (id == "username-display") {
+        el.textContent = `// ${text}` || ""
+    }
+    else el.textContent = text || ""
 }
 
-fetchBtn.addEventListener("click", async () => {
-    const userData = await fetchUser(usernameInput.value.trim())
+async function loadProfile(username) {
+    if (!username) return
+    const userData = await fetchUser(username)
     if (!userData || userData.message === "Not Found") {
         alert("User not found")
+        clearCard()
         return
     }
 
@@ -63,4 +86,20 @@ fetchBtn.addEventListener("click", async () => {
             blogEl.textContent = ''
         }
     }
+
+    if (card) card.classList.add('loaded')
+    usernameInput.value = ''
+}
+
+fetchBtn.addEventListener('click', () => loadProfile(usernameInput.value.trim()))
+
+usernameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault()
+        loadProfile(usernameInput.value.trim())
+    }
 })
+
+// ensure card starts cleared
+clearCard()
+

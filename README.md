@@ -1,2 +1,4 @@
 # github-fetcher
-A simple github profile fetcher. Practice with fetch API and asynchronous functions.
+
+A simple github profile fetcher. Practice with fetch API, asynchronous functions and css.
+Created in 4-5 hours.
