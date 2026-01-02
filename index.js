@@ -35,7 +35,7 @@ function setDisplay(id, text) {
     const el = document.getElementById(id)
     if (!el) return
     if (id == "username-display") {
-        el.textContent = `// ${text}` || ""
+        el.textContent = text ? `// ${text}` : ""
     }
     else el.textContent = text || ""
 }
@@ -80,7 +80,7 @@ async function loadProfile(username) {
     const blogEl = document.getElementById('blog-display')
     if (blogEl) {
         if (userData.blog) {
-            const url = userData.blog.startsWith('http') ? userData.blog : `https://${userData.blog}`
+            const url = userData.blog.startsWith('http') ? userData.blog : `https://` + userData.blog
             blogEl.innerHTML = `Blog: <a href="${url}" target="_blank" rel="noopener noreferrer">${userData.blog}</a>`
         } else {
             blogEl.textContent = ''
